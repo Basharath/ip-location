@@ -1,3 +1,3 @@
 export default function Home() {
-  return <div>Hello from Next</div>;
+  return <div>Welcome to IP location finder</div>;
 }
