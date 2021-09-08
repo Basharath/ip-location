@@ -169,7 +169,11 @@ export default function Main({ data }) {
 
             {message ? (
               <Paper>
-                <Typography p={3}>{message}</Typography>{' '}
+                {message === 'loading' ? (
+                  <CircularProgress sx={{ m: 2 }} />
+                ) : (
+                  <Typography p={3}>{message}</Typography>
+                )}
               </Paper>
             ) : (
               <TableContainer component={Paper}>

@@ -23,7 +23,9 @@ export default function Home({ geoData }) {
 export const getServerSideProps = async ({ query }) => {
   const { ip } = query;
 
-  const geoData = await getGeoLocation(ip || '');
+  const geoData = ip
+    ? await getGeoLocation(ip)
+    : { message: 'loading', ip: '' };
 
   return {
     props: { geoData },
