@@ -10,12 +10,16 @@ import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
-// import FolderIcon from '@mui/icons-material/Folder';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-// import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
+
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+// import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import Layout from './Layout';
+
+import defaultFlag from '../public/flag.svg';
 
 export default function Main({ data }) {
   const router = useRouter();
@@ -28,23 +32,49 @@ export default function Main({ data }) {
     if (q) setSearch(q);
   }, [q]);
 
+  useEffect(() => {
+    if (!search) router.push('/');
+  }, [search]);
+
   const {
     ip,
     country_flag,
-    isp,
-    city,
-    state_prov,
-    country_name,
-    country_capital,
-    country_code2,
-    // capital,
-    // currency,
-    latitude,
-    longitude,
-    // time_zone,
+    isp: ISP,
+    calling_code,
+    city: City,
+    state_prov: State,
+    country_name: Country,
+    country_capital: Capital,
+    country_code2: Code,
+    currency,
+    latitude: Latitude,
+    longitude: Longitude,
+    time_zone,
     zipcode,
+    continent_name,
     client,
+    message,
   } = data;
+
+  const ipData = {
+    ISP,
+    'Calling code': calling_code,
+    City,
+    State,
+    Country,
+    Capital,
+    'Country code': Code,
+    Currency: currency?.name,
+    'Currency symbol': currency?.symbol,
+    Latitude,
+    Longitude,
+    'Time zone': time_zone?.name,
+    'Current time': time_zone?.current_time,
+    'Zip code': zipcode,
+    Continent: continent_name,
+  };
+
+  const tableRows = Object.entries(ipData);
 
   const handleChange = ({ currentTarget: { value } }) => {
     const ipRegex = new RegExp(
@@ -58,8 +88,8 @@ export default function Main({ data }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!isValidIp) return;
-    router.push(`/search?ip=${search}`);
-    if (!search) router.push('/');
+    if (search) router.push(`/search?ip=${search}`);
+    else router.push('/');
   };
 
   return (
@@ -72,10 +102,9 @@ export default function Main({ data }) {
             sx={{
               border: !isMobile && '1px solid #c4c4c4',
               p: isMobile ? 2 : 8,
-              py: 4,
+              py: !isMobile && 4,
               borderRadius: 2,
               textAlign: 'center',
-              mb: 2,
             }}
           >
             <Paper
@@ -84,7 +113,7 @@ export default function Main({ data }) {
                 p: '2px 4px',
                 display: 'flex',
                 alignItems: 'center',
-                width: isMobile ? 300 : 400,
+                width: isMobile ? 280 : 400,
                 mb: 3,
               }}
               elevation={3}
@@ -120,49 +149,58 @@ export default function Main({ data }) {
                 justifyContent: 'center',
               }}
             >
-              <Typography mr={2}>{client ? `Your IP: ${ip}` : ip}</Typography>
-              <Image
-                src={country_flag}
-                alt={country_name}
-                width={60}
-                height={30}
-              />
+              <Typography mr={2}>
+                {client ? `Your IP: ${ip}` : ip || q}
+              </Typography>
+              {!message && (
+                <Image
+                  src={country_flag || defaultFlag}
+                  alt={Country}
+                  width={60}
+                  height={30}
+                />
+              )}
             </Box>
           </Box>
-          <Box>
-            <Typography>IP address info</Typography>
-            <List dense>
-              <ListItem>
-                {/* <ListItemIcon>
-                  <FolderIcon />
-                </ListItemIcon> */}
-                <ListItemText primary={isp} />
-              </ListItem>
-              <ListItem>
-                <ListItemText primary={city} />
-              </ListItem>
-              <ListItem>
-                <ListItemText primary={state_prov} />
-              </ListItem>
-              <ListItem>
-                <ListItemText primary={country_name} />
-              </ListItem>
-              <ListItem>
-                <ListItemText primary={country_capital} />
-              </ListItem>
-              <ListItem>
-                <ListItemText primary={latitude} />
-              </ListItem>
-              <ListItem>
-                <ListItemText primary={longitude} />
-              </ListItem>
-              <ListItem>
-                <ListItemText primary={country_code2} />
-              </ListItem>
-              <ListItem>
-                <ListItemText primary={zipcode} />
-              </ListItem>
-            </List>
+          <Box mb={4} sx={{ textAlign: 'center', p: 2 }}>
+            <Typography variant='h5' mt={2} mb={2}>
+              IP address info
+            </Typography>
+
+            {message ? (
+              <Paper>
+                <Typography p={3}>{message}</Typography>{' '}
+              </Paper>
+            ) : (
+              <TableContainer component={Paper}>
+                <Table
+                  sx={{ width: !isMobile ? 550 : 'auto' }}
+                  size='small'
+                  aria-label='a dense table'
+                >
+                  <TableBody>
+                    {tableRows.map((row) => (
+                      <TableRow
+                        key={row[0]}
+                        hover
+                        sx={{
+                          '&:last-child td, &:last-child th': { border: 0 },
+                        }}
+                      >
+                        <TableCell
+                          component='th'
+                          scope='row'
+                          sx={{ width: '50%' }}
+                        >
+                          {row[0]}
+                        </TableCell>
+                        <TableCell align='right'>{row[1]}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
           </Box>
         </>
       )}

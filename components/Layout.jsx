@@ -19,7 +19,7 @@ export default function Layout({
       </Head>
       <Box
         sx={{
-          mt: 9,
+          mt: 4,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -30,7 +30,7 @@ export default function Layout({
           variant='h4'
           component='h1'
           color='primary'
-          sx={{ cursor: 'pointer' }}
+          sx={{ cursor: 'pointer', '&:hover': { color: 'dodgerblue' } }}
           onClick={() => router.push('/')}
         >
           IP location finder
