@@ -19,7 +19,7 @@ import Layout from './Layout';
 
 export default function Main({ data }) {
   const router = useRouter();
-  const q = router.query.ip;
+  const q = router.pathname !== '/' && router.query.ip;
   const [search, setSearch] = useState(q || '');
   const [isValidIp, setIsValidIp] = useState(true);
   const isMobile = useMediaQuery('(max-width: 540px)');
@@ -123,7 +123,6 @@ export default function Main({ data }) {
               <Typography mr={2}>{client ? `Your IP: ${ip}` : ip}</Typography>
               <Image
                 src={country_flag}
-                // src='https://ipgeolocation.io/static/flags/in_64.png'
                 alt={country_name}
                 width={60}
                 height={30}

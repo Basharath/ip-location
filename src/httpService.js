@@ -2,12 +2,12 @@ import axios from 'axios';
 
 const API_URL = process.env.apiUrl;
 const API_KEY = process.env.apiKey;
-const IP_URL = process.env.NEXT_PUBLIC_IP_GEO_URL;
+const IP_URL = process.env.NEXT_PUBLIC_IP_URL;
 
-const getClientGeo = async () => {
+const getClientIp = async () => {
   const res = await axios(IP_URL);
-  const result = res.data;
 
+  const result = res.data;
   return result;
 };
 
@@ -18,4 +18,4 @@ const getGeoLocation = async (ip) => {
   return data;
 };
 
-export { getClientGeo, getGeoLocation };
+export { getClientIp, getGeoLocation };
