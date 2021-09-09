@@ -87,7 +87,7 @@ export default function Main({ data }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!isValidIp) return;
+    if (!isValidIp || !search) return;
     if (search) router.push(`/search?ip=${search}`);
     else router.push('/');
   };
@@ -104,7 +104,9 @@ export default function Main({ data }) {
               p: isMobile ? 2 : 8,
               py: !isMobile && 4,
               borderRadius: 2,
-              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
             }}
           >
             <Paper
@@ -113,6 +115,7 @@ export default function Main({ data }) {
                 p: '2px 4px',
                 display: 'flex',
                 alignItems: 'center',
+                justifyContent: 'center',
                 width: isMobile ? 280 : 400,
                 mb: 3,
               }}
@@ -147,9 +150,10 @@ export default function Main({ data }) {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                flexWrap: 'wrap',
               }}
             >
-              <Typography mr={2}>
+              <Typography mr={!isMobile && 2} textAlign='center'>
                 {client ? `Your IP: ${ip}` : ip || q}
               </Typography>
               {!message && (
