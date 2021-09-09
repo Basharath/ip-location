@@ -153,7 +153,7 @@ export default function Main({ data }) {
                 flexWrap: 'wrap',
               }}
             >
-              <Typography mr={!isMobile && 2} textAlign='center'>
+              <Typography mr={2} textAlign='center'>
                 {client ? `Your IP: ${ip}` : ip || q}
               </Typography>
               {!message && (
